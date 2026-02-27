@@ -23,9 +23,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "mono.ge — AI for Business in Georgia",
+  title: "relocation.ge — Immigration & Relocation Guide for Georgia",
   description:
-    "Register companies, manage taxes, handle documents, and more — all through AI.",
+    "Work permits, residence permits, visas, and legal compliance for foreigners in Georgia.",
 };
 
 export default function RootLayout({

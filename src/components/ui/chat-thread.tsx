@@ -21,6 +21,7 @@ export interface AssistantMessageProps {
   onThumbsDown?: (messageId: string) => void;
   onShare?: (messageId: string) => void;
   children?: ReactNode;
+  feedback?: "like" | "dislike" | null;
 }
 
 export const AssistantMessage: FC<AssistantMessageProps> = ({
@@ -32,6 +33,7 @@ export const AssistantMessage: FC<AssistantMessageProps> = ({
   onThumbsDown,
   onShare,
   children,
+  feedback,
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -66,11 +68,13 @@ export const AssistantMessage: FC<AssistantMessageProps> = ({
           onClick={() => onThumbsUp?.(id)}
           icon={ThumbsUp}
           label="Good response"
+          active={feedback === "like"}
         />
         <ActionButton
           onClick={() => onThumbsDown?.(id)}
           icon={ThumbsDown}
           label="Bad response"
+          active={feedback === "dislike"}
         />
         {onShare && (
           <ActionButton
@@ -131,11 +135,7 @@ export const UserMessage: FC<UserMessageProps> = ({
 
       {/* User message bubble */}
       <div
-        className="max-w-[85%] sm:max-w-[70%] px-4 py-3 text-base leading-relaxed text-white whitespace-pre-wrap"
-        style={{
-          backgroundColor: "#00bbff",
-          borderRadius: "20px",
-        }}
+        className="max-w-[85%] sm:max-w-[70%] rounded-[20px] bg-foreground px-4 py-3 text-base leading-relaxed text-background whitespace-pre-wrap"
       >
         {content}
       </div>
@@ -148,16 +148,19 @@ interface ActionButtonProps {
   icon: React.ElementType;
   label: string;
   size?: "sm" | "md";
+  active?: boolean;
 }
 
-export const ActionButton: FC<ActionButtonProps> = ({ onClick, icon: Icon, label, size = "md" }) => {
+export const ActionButton: FC<ActionButtonProps> = ({ onClick, icon: Icon, label, size = "md", active }) => {
   return (
     <button
       onClick={onClick}
       aria-label={label}
       className={cn(
         "flex items-center justify-center rounded-lg transition-colors",
-        "text-muted-foreground hover:bg-secondary hover:text-foreground",
+        active
+          ? "text-foreground bg-secondary"
+          : "text-muted-foreground hover:bg-secondary hover:text-foreground",
         size === "sm" ? "h-7 w-7" : "h-8 w-8"
       )}
     >

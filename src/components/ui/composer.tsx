@@ -12,14 +12,8 @@ import {
 	FilePreview,
 	type UploadedFile,
 } from "@/components/ui/file-preview";
-import {
-	SlashCommandDropdown,
-	type SlashCommandMatch,
-	type Tool,
-} from "@/components/ui/slash-command-dropdown";
 
-// Re-export types for convenience
-export type { Tool, SlashCommandMatch, UploadedFile };
+export type { UploadedFile };
 
 export interface ComposerContextOption {
 	id: string;
@@ -38,10 +32,6 @@ export interface ComposerProps {
 	onChange?: (value: string) => void;
 	/** Whether the composer is disabled */
 	disabled?: boolean;
-	/** Callback when a tool is selected from slash command dropdown */
-	onToolSelect?: (tool: Tool) => void;
-	/** Available tools for the slash command dropdown */
-	tools?: Tool[];
 	/** Callback when attach button is clicked (if no context options) */
 	onAttachClick?: () => void;
 	/** Context options for the plus button dropdown */
@@ -64,16 +54,13 @@ export interface ComposerProps {
 	isLoading?: boolean;
 }
 
-// Primary color matching GAIA: #00bbff
-const PRIMARY_COLOR = "#00bbff";
+const PRIMARY_COLOR = "currentColor";
 
 export const Composer: FC<ComposerProps> = ({
 	placeholder = "What can I do for you today?",
 	onSubmit,
 	onChange,
 	disabled = false,
-	onToolSelect,
-	tools = [],
 	onAttachClick,
 	contextOptions,
 	autoFocus = false,
@@ -86,10 +73,7 @@ export const Composer: FC<ComposerProps> = ({
 	isLoading = false,
 }) => {
 	const [inputValue, setInputValue] = useState(defaultValue);
-	const [isToolsDropdownOpen, setIsToolsDropdownOpen] = useState(false);
 	const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
-	const [selectedCategory, setSelectedCategory] = useState("all");
-	const selectedToolIndex = 0; // Currently no keyboard navigation, always start at 0
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const composerRef = useRef<HTMLDivElement>(null);
 
@@ -144,45 +128,27 @@ export const Composer: FC<ComposerProps> = ({
 				handleSubmit();
 			}
 			if (e.key === "Escape") {
-				setIsToolsDropdownOpen(false);
 				setIsContextMenuOpen(false);
 			}
 		},
 		[handleSubmit, disabled, isLoading],
 	);
 
-	// Handle "+" button click - opens tools dropdown or context menu
+	// Handle "+" button click - opens context menu or attach
 	const handleContextClick = useCallback(() => {
 		if (isLoading) return;
 		if (contextOptions && contextOptions.length > 0) {
 			setIsContextMenuOpen(!isContextMenuOpen);
-			setIsToolsDropdownOpen(false);
-		} else if (tools.length > 0) {
-			setIsToolsDropdownOpen(!isToolsDropdownOpen);
-			setIsContextMenuOpen(false);
 		} else {
 			onAttachClick?.();
 		}
-	}, [contextOptions, isContextMenuOpen, tools, isToolsDropdownOpen, onAttachClick, isLoading]);
-
-	// Handle tool selection
-	const handleToolSelect = useCallback(
-		(match: SlashCommandMatch) => {
-			onToolSelect?.(match.tool);
-			setIsToolsDropdownOpen(false);
-		},
-		[onToolSelect],
-	);
+	}, [contextOptions, isContextMenuOpen, onAttachClick, isLoading]);
 
 	// Close dropdowns when clicking outside
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			const target = event.target as Element;
-			if (
-				!composerRef.current?.contains(target) &&
-				!target.closest(".slash-command-dropdown")
-			) {
-				setIsToolsDropdownOpen(false);
+			if (!composerRef.current?.contains(target)) {
 				setIsContextMenuOpen(false);
 			}
 		};
@@ -198,15 +164,6 @@ export const Composer: FC<ComposerProps> = ({
 		}
 	}, [autoFocus]);
 
-	// Convert tools to matches for dropdown
-	const toolMatches: SlashCommandMatch[] = tools.map((tool) => ({
-		tool,
-		score: 1,
-	}));
-
-	// Get unique categories
-	const categories = ["all", ...new Set(tools.map((t) => t.category))];
-
 	const canSubmit = currentValue.trim() || attachedFiles.length > 0;
 
 	return (
@@ -220,25 +177,6 @@ export const Composer: FC<ComposerProps> = ({
 					"bg-zinc-100 dark:bg-[#2f2f2f]",
 				)}
 			>
-				{/* Slash Command Dropdown - positioned above composer */}
-				{tools.length > 0 && isToolsDropdownOpen && (
-					<div className="absolute bottom-full left-0 right-0 mb-2 z-50">
-						<SlashCommandDropdown
-							matches={toolMatches}
-							selectedIndex={selectedToolIndex}
-							onSelect={handleToolSelect}
-							onClose={() => setIsToolsDropdownOpen(false)}
-							position={{ left: 0, width: undefined }}
-							isVisible={true}
-							openedViaButton={true}
-							selectedCategory={selectedCategory}
-							categories={categories}
-							onCategoryChange={setSelectedCategory}
-							className="relative w-full"
-							style={{ position: "relative" }}
-						/>
-					</div>
-				)}
 				{/* Attached Files Preview - using FilePreview component */}
 				<FilePreview
 					files={attachedFiles}
@@ -271,20 +209,13 @@ export const Composer: FC<ComposerProps> = ({
 								maxHeight: `${24 * maxRows}px`,
 							}}
 						/>
-						{/* Hint for slash commands */}
-						<div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500 pointer-events-none">
-							<kbd className="rounded bg-zinc-200 dark:bg-zinc-700 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
-								/
-							</kbd>
-							<span>for tools</span>
-						</div>
 					</div>
 				</form>
 
 				{/* Toolbar */}
 				<div className="flex items-center justify-between px-2 pt-1">
 					<div className="flex items-center gap-1">
-						{/* Add Context / Attach / Tools Button */}
+						{/* Add Context / Attach Button */}
 						<div className="relative">
 							<button
 								type="button"
@@ -296,17 +227,17 @@ export const Composer: FC<ComposerProps> = ({
 									"bg-zinc-200 dark:bg-[#424242] transition-colors",
 									"hover:bg-zinc-300 dark:hover:bg-[#4a4a4a]",
 									"disabled:cursor-wait disabled:opacity-70",
-									(isContextMenuOpen || isToolsDropdownOpen) &&
-										"bg-[#00bbff]/20 text-[#00bbff] hover:bg-[#00bbff]/30 dark:bg-[#00bbff]/20 dark:hover:bg-[#00bbff]/30",
+									isContextMenuOpen &&
+										"bg-foreground/10 text-foreground hover:bg-foreground/15 dark:bg-foreground/10 dark:hover:bg-foreground/15",
 								)}
-								aria-label="Add context, attach files, or browse tools"
+								aria-label="Add context or attach files"
 							>
 								<HugeiconsIcon
 									icon={PlusSignIcon}
 									size={23}
 									className={cn(
 										"text-zinc-500 dark:text-zinc-400",
-										(isContextMenuOpen || isToolsDropdownOpen) && "text-[#00bbff]",
+										isContextMenuOpen && "text-foreground",
 									)}
 								/>
 							</button>
@@ -356,7 +287,7 @@ export const Composer: FC<ComposerProps> = ({
 							"flex h-9 w-9 min-w-9 max-w-9 items-center justify-center rounded-full transition-colors cursor-pointer",
 							"disabled:cursor-not-allowed",
 							// Enabled state - primary color background
-							canSubmit && "bg-[#00bbff] text-white hover:bg-[#00a3e0]",
+							canSubmit && "bg-foreground text-background hover:bg-foreground/90",
 							// Disabled state - visible gray background that contrasts with composer
 							!canSubmit &&
 								"bg-zinc-200 dark:bg-[#424242] text-zinc-400 dark:text-zinc-500",
