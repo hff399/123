@@ -36,6 +36,36 @@ Official publications are available via:
 
 ---
 
+## 1a. Understanding Stay Types in Georgia: Visa-Free Stay, Visa, and Residence Permit
+
+These are three distinct legal concepts. Confusing them is a common mistake.
+
+### Visa-Free Stay
+- Short-term presence in Georgia (usually up to 1 year for many nationalities)
+- Does NOT grant the right to work or conduct business activity
+- Does NOT provide a basis for a work permit
+- Suitable only for tourism, short visits, or transit
+
+### Visa (including D1 Work Visa)
+- Issued for a specific purpose (work, study, etc.)
+- D1 visa is required for labour activity when the person is outside Georgia at the time of obtaining a work permit
+- Must be obtained from a Georgian consular authority abroad
+- Does not replace a residence permit for long-term stay
+
+### Residence Permit
+- Grants the right to reside in Georgia for an extended period
+- Different categories exist (work, study, investment, family, etc.)
+- A work residence permit requires a valid work permit as a prerequisite
+- Must be applied for within 10 calendar days of obtaining a work permit (if already in Georgia)
+
+### Key Principle: Interconnected but Separate
+- A work permit does not grant the right to stay in Georgia
+- A residence permit does not grant the right to work
+- Both must be obtained and maintained independently
+- Visa-free stay does NOT provide work rights under any circumstances
+
+---
+
 ## 2. D1 Visa in Georgia for Foreign Individual Entrepreneurs (IEs) and Foreign Employees
 
 From March 1, 2026, when a foreigner enters Georgia for the purpose of performing labour or economic activity, such purpose must be properly reflected in their migration status.
@@ -167,9 +197,15 @@ Foreigners already working and registered in the electronic labour migration sys
 
 ### Remote Employees
 
-If your work is performed entirely outside Georgia, does not require physical presence, and does not use Georgian infrastructure — you may fall outside the residence/visa requirement.
+The legislation does not include a single explicit statutory text that says "remote foreign activity is exempt" from work-permit requirements.
 
-However, work permit obligations may still apply if the employer is Georgian.
+In practice, it is currently interpreted that foreigners who conduct their activity entirely from abroad, without physical or economic presence in Georgia, may fall outside the scope of work-permit enforcement.
+
+However, this position is based on interpretation and emerging administrative practice rather than an express statutory exemption, and differing interpretations remain possible.
+
+Until official clarifications or case practice develop further, this issue should be treated with caution and assessed on a case-by-case basis.
+
+If the employer is Georgian, work permit obligations may still apply regardless of the employee's physical location.
 
 ### Practical Risk Areas for Foreign Employees
 
@@ -479,7 +515,9 @@ New application can be submitted no earlier than 1 month after the decision is o
 
 **If Already in Georgia:** Apply for a work residence permit (or IT residence permit) within 10 calendar days at the State Services Development Agency.
 
-**Exception:** These obligations do not apply if you already hold a valid Georgian residence permit, or perform activity fully remotely without needing to enter Georgia.
+**Exception:** These obligations do not apply if you already hold a valid Georgian residence permit.
+
+**Note on remote activity:** The legislation does not explicitly exempt remote activity from work-permit requirements. While current interpretation suggests that activity conducted entirely from abroad without physical or economic presence in Georgia may fall outside enforcement scope, this is based on interpretation rather than an express statutory provision and should be assessed on a case-by-case basis.
 
 ### When a Work Permit Can Be Terminated
 
